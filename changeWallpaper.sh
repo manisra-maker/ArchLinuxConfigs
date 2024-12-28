@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Directory to pick a random folder from
-BASE_DIR="/home/manish/Wallpapers"
+BASE_DIR="/home/your_user_name/Wallpapers"
 
 # Check if the base directory exists
 if [[ ! -d "$BASE_DIR" ]]; then
