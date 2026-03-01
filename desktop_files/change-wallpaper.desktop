@@ -2,7 +2,7 @@
 Type=Application
 Name=Change Wallpaper (Ranger)
 Comment=Pick wallpaper using ranger
-Exec=kitty -e changeWallpaper.sh
+Exec=kitty -e ~/ArchLinuxConfigs/scripts/changeWallpaper.sh
 Icon=preferences-desktop-wallpaper
 Terminal=false
 Categories=Utility;

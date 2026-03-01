@@ -62,6 +62,8 @@ options=(
   python-pipx "Pipx for pywal16" on
   firefox "Web browser" on
   python-pillow "Image proccessing tool used by kitty" on
+  pavucontrol "pavucontrol" on
+  fastfetch "fastfetch" on
 )
 
 choices=$(dialog --clear \
@@ -145,5 +147,106 @@ if [[ -d "$DESKTOP_SOURCE" ]]; then
 else
   echo "No desktop_files directory found at $DESKTOP_SOURCE"
 fi
+
+echo
+echo "Let's configure zsh shall we ?"
+echo
+
+zsh_banner='
+ _____  _____ __  __  __________  _   __________________ ____________  _________   __
+/__  / / ___// / / / / ____/ __ \/ | / / ____/  _/ ____//_  __/  _/  |/  / ____/  / /
+  / /  \__ \/ /_/ / / /   / / / /  |/ / /_   / // / __   / /  / // /|_/ / __/    / / 
+ / /_____/ / __  / / /___/ /_/ / /|  / __/ _/ // /_/ /  / / _/ // /  / / /___   /_/  
+/____/____/_/ /_/  \____/\____/_/ |_/_/   /___/\____/  /_/ /___/_/  /_/_____/  (_)    
+'
+
+echo "$zsh_banner"
+echo
+
+# install zsh + git + wget (needed for oh-my-zsh)
+sudo pacman -S --needed --noconfirm zsh git wget
+
+# create empty .zshrc if not exists
+if [[ ! -f "$HOME/.zshrc" ]]; then
+  touch "$HOME/.zshrc"
+fi
+
+# install oh-my-zsh (unattended)
+if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+  echo "[+] Installing Oh My Zsh..."
+  RUNZSH=no CHSH=no sh -c \
+    "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else
+  echo "[+] Oh My Zsh already installed."
+fi
+
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+# install zsh-autosuggestions
+if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]]; then
+  echo "[+] Installing zsh-autosuggestions..."
+  git clone https://github.com/zsh-users/zsh-autosuggestions \
+    "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+fi
+
+# install zsh-syntax-highlighting
+if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]]; then
+  echo "[+] Installing zsh-syntax-highlighting..."
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
+    "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+fi
+
+# install powerlevel10k
+if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k" ]]; then
+  echo "[+] Installing powerlevel10k..."
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+    "$ZSH_CUSTOM/themes/powerlevel10k"
+fi
+
+# configure plugins + theme
+echo "[+] Configuring .zshrc..."
+
+# set theme
+sed -i 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' "$HOME/.zshrc"
+
+# set plugins cleanly
+sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' "$HOME/.zshrc"
+
+echo "[+] Zsh setup complete. Restart terminal or run: exec zsh"
+
+aur_banner='
+    ___   __  ______      _____   ________________    __    __    __________      __
+   /   | / / / / __ \    /  _/ | / / ___/_  __/   |  / /   / /   / ____/ __ \    / /
+  / /| |/ / / / /_/ /    / //  |/ /\__ \ / / / /| | / /   / /   / __/ / /_/ /   / / 
+ / ___ / /_/ / _, _/   _/ // /|  /___/ // / / ___ |/ /___/ /___/ /___/ _, _/   /_/  
+/_/  |_\____/_/ |_|   /___/_/ |_//____//_/ /_/  |_/_____/_____/_____/_/ |_|   (_)    
+'
+
+echo
+echo "$aur_banner"
+echo
+
+# ask for AUR helper installation
+read -p "Do you want to install AUR helper (yay)? (y/n): " install_aur
+
+if [[ "$install_aur" == "y" ]]; then
+  if ! command -v yay &>/dev/null; then
+    echo "[+] Installing yay (AUR helper)..."
+    sudo pacman -S --needed --noconfirm base-devel git
+    git clone https://aur.archlinux.org/yay.git /tmp/yay
+    cd /tmp/yay
+    makepkg -si --noconfirm
+    cd -
+    rm -rf /tmp/yay
+  else
+    echo "[+] yay already installed."
+  fi
+else
+  echo "Skipping AUR installation."
+fi
+
+echo
+echo "[+] Installation complete."
+echo "Open a new terminal to start using zsh."
 
 echo "Done."
