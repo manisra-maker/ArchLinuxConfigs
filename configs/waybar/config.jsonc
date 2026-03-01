@@ -1,7 +1,6 @@
 {
     // "layer": "top", // Waybar at top layer
     "position": "top", // Waybar position (top|bottom|left|right)
-    "height": 5, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
     // Choose the order of the modules
     //"modules-left": ["hyprland/workspaces", "hyprland/submap", "custom/media", "hyprland/window"],
@@ -9,8 +8,8 @@
     "modules-left": ["hyprland/workspaces"],
     // "modules-center": ["hyprland/window"],
     "modules-center": ["clock"],
-    // "modules-right": ["pulseaudio", "network","cpu","memory","battery", "battery#bat2", "clock","custom/power"]
-    "modules-right": ["pulseaudio", "network","battery", "battery#bat2","custom/power"],
+    "modules-right": ["pulseaudio", "network","cpu","memory","battery", "battery#bat2","custom/power"],
+    // "modules-right": ["pulseaudio", "network","battery", "battery#bat2","custom/power"],
     // Modules configuration
     // "hyprland/workspaces": {
     //     "disable-scroll": true,
@@ -76,7 +75,7 @@
     // },
 
     "clock": {
-  "format": "  {:%A, %d %b %Y  󰦖  %I:%M %p}",
+  "format": "   {:%A, %d %b %Y    󰦖    %I:%M %p}  ",
   // "format": "  {:%A, %d %b %Y} 󰦖  {:%I:%M %p}",
   // "format": "{:%A, %d %b %Y  %I:%M %p}",
   // "tooltip-format": "{calendar}",
@@ -96,11 +95,11 @@
 
 
     "cpu": {
-      "format": "  {usage}% ",
+      "format": "    {usage}%",
       "tooltip": false
     },
     "memory": {
-      "format": "  {}% "
+      "format": "    {}%"
     },
     // "temperature": {
     //     // "thermal-zone": 2,
@@ -122,14 +121,14 @@
             "warning": 30,
             "critical": 15
       },
-      "format": "{capacity}% {icon}",
-      "format-full": "{capacity}% {icon}",
+      "format": "{icon} {capacity}%",
+      "format-full": " {icon} {capacity}%",
       "format-charging": "{capacity}%  ",
       "format-plugged": "  {capacity}%",
-      "format-alt": "{time} {icon}",
+      "format-alt": "{icon} {time}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
-        "format-icons": ["  ", "  ", "  ", "  ", "  "]
+        "format-icons": ["   ", "   ", "   ", "   ", "   "]
     },
     "battery#bat2": {
       "bat": "BAT2"
@@ -141,8 +140,8 @@
   "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "  {essid} ({signalStrength}%)",
-        "format-ethernet": "  {ifname}: {ipaddr}/{cidr}",
-        "format-linked": "  {ifname} (No IP)",
+        "format-ethernet": "󰈀    {ifname}: {ipaddr}/{cidr}",
+        "format-linked": "  {ifname} (No IP)",
         "format-disconnected": "Disconnected ",
         "format-alt": "{ifname}: {ipaddr}/{cidr}",
         "on-click-right": "alacritty -e nmtui"
@@ -156,8 +155,8 @@
     "format-icons": {
       "headphones": "",
       "default": [
-        " ",
-        "  "
+        "   ",
+        "   "
       ]
     },
     "scroll-step": 5,
@@ -175,15 +174,8 @@
   },
 
   "custom/power": {
-    "format" : " ⏻  ",
-    "tooltip": false,
-    "menu": "on-click",
-    "menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
-    "menu-actions": {
-      "shutdown": "shutdown -h now",
-      "reboot": "reboot",
-      "suspend": "systemctl suspend",
-      "hibernate": "systemctl hibernate"
-    }
-  }
+  "format": " ⏻ ",
+  "tooltip": false,
+  "on-click": "/home/manish/.config/rofi/powermenu.sh"
+ }
 }
