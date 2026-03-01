@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=YT-CLI
+Exec=env PATH=/home/manish/.local/bin:/usr/bin python3 /home/manish/yt-cli/yt2.py
+Terminal=true
+Type=Application
+Categories=Utility;

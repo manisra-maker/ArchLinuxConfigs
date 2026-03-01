@@ -131,4 +131,19 @@ for item in "$CONFIG_SOURCE"/*; do
   fi
 done
 
+# copy desktop files
+DESKTOP_SOURCE="./desktop_files"
+DESKTOP_DEST="$HOME/.local/share/applications"
+
+echo
+echo "[+] Copying desktop files..."
+
+if [[ -d "$DESKTOP_SOURCE" ]]; then
+  mkdir -p "$DESKTOP_DEST"
+  cp -r "$DESKTOP_SOURCE"/* "$DESKTOP_DEST"/
+  echo "Desktop files copied."
+else
+  echo "No desktop_files directory found at $DESKTOP_SOURCE"
+fi
+
 echo "Done."
