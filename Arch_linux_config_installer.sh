@@ -86,9 +86,39 @@ pipx ensurepath
 # install pywal16
 if ! pipx list | grep -q pywal16-colors; then
   echo "[+] Installing pywal16-colors..."
-  pipx install pywal16-colors
+  pipx install pywal16
 else
   echo "[+] pywal16-colors already installed."
 fi
+
+CONFIG_SOURCE="/home/manish/ArchLinuxConfigs"
+CONFIG_DEST="$HOME/.config"
+
+echo
+echo "[+] Copying configuration files..."
+
+if [[ ! -d "$CONFIG_SOURCE" ]]; then
+  echo "Config source directory not found: $CONFIG_SOURCE"
+  exit 1
+fi
+
+for item in "$CONFIG_SOURCE"/*; do
+  name=$(basename "$item")
+  dest_path="$CONFIG_DEST/$name"
+
+  if [[ -e "$dest_path" ]]; then
+    read -p "Config '$name' exists. Replace it? (y/n): " replace
+    if [[ "$replace" == "y" ]]; then
+      rm -rf "$dest_path"
+      cp -r "$item" "$CONFIG_DEST/"
+      echo "Replaced $name"
+    else
+      echo "Skipped $name"
+    fi
+  else
+    cp -r "$item" "$CONFIG_DEST/"
+    echo "Copied $name"
+  fi
+done
 
 echo "Done."
