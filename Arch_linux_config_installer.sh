@@ -61,6 +61,7 @@ options=(
   deno "Deno runtime" on
   python-pipx "Pipx for pywal16" on
   firefox "Web browser" on
+  python-pillow "Image proccessing tool used by kitty" on
 )
 
 choices=$(dialog --clear \
@@ -89,6 +90,15 @@ if ! pipx list | grep -q pywal16-colors; then
   pipx install pywal16
 else
   echo "[+] pywal16-colors already installed."
+fi
+
+# install pywalfox
+if ! pipx list | grep -q pywalfox; then
+  echo "[+] Installing pywalfox..."
+  pipx install --index-url https://test.pypi.org/simple/ pywalfox==2.8.0rc1
+  pywalfox install
+else
+  echo "[+] pywalfox already installed."
 fi
 
 CONFIG_SOURCE="/home/manish/ArchLinuxConfigs/configs/"
