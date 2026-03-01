@@ -91,7 +91,7 @@ else
   echo "[+] pywal16-colors already installed."
 fi
 
-CONFIG_SOURCE="/home/manish/ArchLinuxConfigs"
+CONFIG_SOURCE="/home/manish/ArchLinuxConfigs/configs/"
 CONFIG_DEST="$HOME/.config"
 
 echo

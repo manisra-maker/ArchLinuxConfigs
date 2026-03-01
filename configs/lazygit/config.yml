@@ -1,0 +1,10 @@
+keybinding:
+  universal:
+    # Unbind push/pull globally to avoid accidental triggers
+    pushFiles: ""
+    pullFiles: ""
+
+  files:
+    # Safer alternatives
+    pushFiles: "ctrl+p"
+    pullFiles: "ctrl+l"
