@@ -33,4 +33,5 @@ For Terminal i use
 ## Some tastefull screenshots 📷   
 
 ![](./desktop_images/2026-03-08-180810_hyprshot.png)
-![](./desktop_images/2026-03-08-181137_hyprshot.png)
+
+![](./desktop_images/2026-03-08-182524_hyprshot.png)
