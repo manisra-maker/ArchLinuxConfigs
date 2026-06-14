@@ -101,42 +101,49 @@ return {
     },
   },
   config = function(_, opts)
-  require("obsidian").setup(opts)
+    require("obsidian").setup(opts)
 
-  -- 🧠 Keymap for pasting clipboard image into correct vault
-  vim.keymap.set("n", "<leader>op", function()
-    local current_file = vim.fn.expand("%:p")
+    vim.api.nvim_create_autocmd("BufNewFile", {
+      pattern = "*.md",
+      callback = function()
+        print("NEW MARKDOWN FILE")
+      end,
+    })
 
-    -- Prompt for image name
-    local img_name = vim.fn.input("📸 Enter image name (without extension): ")
-    if img_name == "" then
-      vim.notify("❌ Cancelled: No image name provided", vim.log.levels.WARN)
-      return
-    end
+    -- 🧠 Keymap for pasting clipboard image into correct vault
+    vim.keymap.set("n", "<leader>op", function()
+      local current_file = vim.fn.expand("%:p")
 
-    -- Run your clipboard-to-file script
-    local img_path = vim.fn.system(
-      string.format("~/.local/bin/paste_img_from_clipboard.sh %s %s",
-        vim.fn.shellescape(current_file),
-        vim.fn.shellescape(img_name)
-      )
-    ):gsub("\n", "")
+      -- Prompt for image name
+      local img_name = vim.fn.input("📸 Enter image name (without extension): ")
+      if img_name == "" then
+        vim.notify("❌ Cancelled: No image name provided", vim.log.levels.WARN)
+        return
+      end
 
-    if vim.v.shell_error ~= 0 or img_path == "" then
-      vim.notify("❌ No image in clipboard or failed to save image", vim.log.levels.ERROR)
-      return
-    end
+      -- Run your clipboard-to-file script
+      local img_path = vim.fn.system(
+        string.format("~/.local/bin/paste_img_from_clipboard.sh %s %s",
+          vim.fn.shellescape(current_file),
+          vim.fn.shellescape(img_name)
+        )
+      ):gsub("\n", "")
 
-    -- Get vault-relative path (everything after /Obsidian/<vault>/)
-    local rel_path = img_path:match(".*/Obsidian/[^/]+/(.*)")
-    if rel_path and not rel_path:match("^%.%.") then
-      rel_path = "../" .. rel_path
-    end
-    if not rel_path then rel_path = img_path end
+      if vim.v.shell_error ~= 0 or img_path == "" then
+        vim.notify("❌ No image in clipboard or failed to save image", vim.log.levels.ERROR)
+        return
+      end
 
-    -- Insert link
-    vim.api.nvim_put({ string.format("![[%s]]", rel_path) }, "l", true, true)
-    vim.notify("✅ Image pasted as: " .. rel_path)
-  end, { desc = "Paste clipboard image into correct Obsidian vault" })
-end,
+      -- Get vault-relative path (everything after /Obsidian/<vault>/)
+      local rel_path = img_path:match(".*/Obsidian/[^/]+/(.*)")
+      if rel_path and not rel_path:match("^%.%.") then
+        rel_path = "../" .. rel_path
+      end
+      if not rel_path then rel_path = img_path end
+
+      -- Insert link
+      vim.api.nvim_put({ string.format("![[%s]]", rel_path) }, "l", true, true)
+      vim.notify("✅ Image pasted as: " .. rel_path)
+    end, { desc = "Paste clipboard image into correct Obsidian vault" })
+  end,
 }
