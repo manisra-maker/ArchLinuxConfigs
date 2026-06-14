@@ -103,13 +103,6 @@ return {
   config = function(_, opts)
     require("obsidian").setup(opts)
 
-    vim.api.nvim_create_autocmd("BufNewFile", {
-      pattern = "*.md",
-      callback = function()
-        print("NEW MARKDOWN FILE")
-      end,
-    })
-
     -- 🧠 Keymap for pasting clipboard image into correct vault
     vim.keymap.set("n", "<leader>op", function()
       local current_file = vim.fn.expand("%:p")
