@@ -1,0 +1,72 @@
+# Install TPM first:
+# git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+# using xsel instead of xclip
+
+##### PREFIX #####
+set -g prefix C-b
+unbind C-b
+bind C-b send-prefix
+
+##### MOUSE #####
+set -g mouse on
+
+##### TERMINAL #####
+set -g default-terminal "screen-256color"
+set -ga terminal-overrides ",*:Tc"
+
+##### CLIPBOARD #####
+set -g set-clipboard on
+
+##### INDEXES #####
+set -g base-index 1
+setw -g pane-base-index 1
+
+##### COPY MODE #####
+setw -g mode-keys vi
+
+# Enter copy mode
+bind Escape copy-mode
+
+# Start selection
+bind-key -T copy-mode-vi v send-keys -X begin-selection
+
+# Copy selection to X11 clipboard
+bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "xsel --clipboard --input"
+
+# Mouse selection -> clipboard
+bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xsel --clipboard --input"
+
+##### RIGHT CLICK PASTE #####
+
+# Disable tmux's default right-click menu
+unbind -T root MouseDown3Pane
+
+# Right click pastes X11 clipboard
+bind-key -T root MouseDown3Pane run-shell "xsel --clipboard --output | tmux load-buffer - && tmux paste-buffer -d"
+
+##### PASTE #####
+
+# Paste tmux buffer
+bind p paste-buffer
+
+# Paste X11 clipboard
+bind P run-shell "xsel --clipboard --output | tmux load-buffer - && tmux paste-buffer -d"
+
+##### PANES #####
+bind | split-window -h
+bind - split-window -v
+
+##### RELOAD #####
+bind r source-file ~/.tmux.conf \; display-message "Config reloaded"
+
+##### STATUS #####
+set -g status-position bottom
+
+##### PLUGINS #####
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'egel/tmux-gruvbox'
+
+set -g @tmux-gruvbox 'dark'
+
+run '~/.tmux/plugins/tpm/tpm'
